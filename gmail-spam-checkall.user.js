@@ -5,7 +5,7 @@
 // @include      https://mail.google.com/mail/*
 // ==/UserScript==
 window.addEventListener('load', function() {
-    var del = document.querySelector('input[type="submit"][value^="Delete"]');
+    var del = document.querySelector('input[type="submit"][value="Delete Forever"]');
     if(del) {
         var cbox = document.createElement('input');
         cbox.setAttribute('type', 'checkbox');
