@@ -1,21 +1,28 @@
 // ==UserScript==
-// @name         gmail-spam-checkall.user.js
-// @description  Adds a check-all box to spam folder in HTML-only Gmail
+// @name         gmail-checkall.user.js
+// @description  Adds a check-all box to folders in HTML-only Gmail
 // @include      http://mail.google.com/mail/*
 // @include      https://mail.google.com/mail/*
 // ==/UserScript==
-window.addEventListener('load', function() {
-    var del = document.querySelector('input[type="submit"][value="Delete Forever"]');
-    if(del) {
-        var cbox = document.createElement('input');
-        cbox.setAttribute('type', 'checkbox');
-        cbox.addEventListener('click', function() {
-            [].forEach.call(document.querySelectorAll('input[type="checkbox"]'), function(box) {
-                if (box == cbox) return;
-                if (box.checked) box.removeAttribute('checked');
-                else box.setAttribute('checked', true);
+
+document.addEventListener('DOMContentLoaded', function () {
+    var buttons = 'form select[name="tact"]';
+                  //'form input[type="submit"][value="Delete Forever"], ' +
+                  //'form input[type="submit"][value^="Remove label"], ' +
+
+    [].forEach.call(document.querySelectorAll(buttons), function (button) {
+        var checkbox = document.createElement('input');
+        var checkboxes = document.querySelectorAll('form td input[type="checkbox"]');
+
+        checkbox.type = 'checkbox';
+        checkbox.addEventListener('click', function () {
+            [].forEach.call(checkboxes, function (box) {
+                if (box != checkbox) {box.checked = !box.checked}
             });
         });
-        del.parentNode.insertBefore(cbox, del);
-    }
+
+        // firefox doesn't have insertAdjacentElement wtf
+        // button.insertAdjacentElement('beforebegin', checkbox);
+        button.parentNode.insertBefore(checkbox, button);
+    });
 });
